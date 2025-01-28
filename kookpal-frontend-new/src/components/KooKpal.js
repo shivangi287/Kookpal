@@ -6,6 +6,7 @@ import LoginModal from './LoginModal';
 import RecipeDisplay from './RecipeDisplay';
 import RecipeDetailsModal from './RecipeDetailsModal';
 import IngredientInput from './IngredientInput';
+import { BACKEND_URL } from '../config';
 
 const KooKpal = () => {
   const { user, login, logout, favorites, toggleFavorite, isFavorite } = useAuth();
@@ -45,7 +46,7 @@ const KooKpal = () => {
     setError(null);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/recipes?ingredients=${ingredientsList.join(',')}`
+        `${BACKEND_URL}/api/recipes?ingredients=${ingredientsList.join(',')}`
       );
       if (!response.ok) throw new Error('Failed to fetch recipes');
       const data = await response.json();
@@ -61,7 +62,7 @@ const KooKpal = () => {
   const getRecipeDetails = async (recipe) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/recipe/${recipe.id}`);
+      const response = await fetch(`${BACKEND_URL}/api/recipe/${recipe.id}`);
       if (!response.ok) throw new Error('Failed to fetch recipe details');
       const detailedRecipe = await response.json();
       setSelectedRecipe(detailedRecipe);
