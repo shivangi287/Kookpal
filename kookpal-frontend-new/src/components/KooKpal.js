@@ -45,13 +45,30 @@ const KooKpal = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        `${BACKEND_URL}/api/recipe?ingredients=${ingredientsList.join(',')}`
-      );
-      if (!response.ok) throw new Error('Failed to fetch recipes');
+      const url = `${BACKEND_URL}/api/recipe?ingredients=${ingredientsList.join(',')}`;
+      console.log('Fetching recipes from URL:', url);
+      
+      const response = await fetch(url);
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response body:', errorText);
+        throw new Error(`Failed to fetch recipes: ${response.status} ${response.statusText}`);
+      }
+
       const data = await response.json();
+      console.log('Received data:', data);
+
+      if (!Array.isArray(data)) {
+        console.error('Unexpected data format:', data);
+        throw new Error('Received data is not an array');
+      }
+
       setRecipes(data);
     } catch (err) {
+      console.error('Error in searchRecipes:', err);
       setError(err.message);
       setRecipes([]);
     } finally {
@@ -62,13 +79,26 @@ const KooKpal = () => {
   const getRecipeDetails = async (recipe) => {
     setLoading(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/recipe/${recipe.id}`);
-      if (!response.ok) throw new Error('Failed to fetch recipe details');
+      const url = `${BACKEND_URL}/api/recipe/${recipe.id}`;
+      console.log('Fetching recipe details from URL:', url);
+
+      const response = await fetch(url);
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response body:', errorText);
+        throw new Error(`Failed to fetch recipe details: ${response.status} ${response.statusText}`);
+      }
+
       const detailedRecipe = await response.json();
+      console.log('Received detailed recipe:', detailedRecipe);
+
       setSelectedRecipe(detailedRecipe);
     } catch (err) {
+      console.error('Error in getRecipeDetails:', err);
       setError(err.message);
-      console.error('Error fetching recipe details:', err);
     } finally {
       setLoading(false);
     }
