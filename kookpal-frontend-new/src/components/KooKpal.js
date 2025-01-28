@@ -46,7 +46,7 @@ const KooKpal = () => {
     setError(null);
     try {
       const response = await fetch(
-        `${BACKEND_URL}/api/recipes?ingredients=${ingredientsList.join(',')}`
+        `${BACKEND_URL}/api/recipe?ingredients=${ingredientsList.join(',')}`
       );
       if (!response.ok) throw new Error('Failed to fetch recipes');
       const data = await response.json();
