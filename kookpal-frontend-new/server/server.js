@@ -23,7 +23,7 @@ const checkApiKey = (req, res, next) => {
 };
 
 // Route to search recipes by ingredients
-app.get('/api/recipes', checkApiKey, async (req, res) => {
+app.get('/api/recipe', checkApiKey, async (req, res) => {
     const { ingredients } = req.query;
     const url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=${ingredients}&number=10`;
     
